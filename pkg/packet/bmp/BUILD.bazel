@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "bmp",
+    srcs = ["bmp.go"],
+    importpath = "github.com/osrg/gobgp/v3/pkg/packet/bmp",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/packet/bgp"],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":bmp",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "bmp_test",
+    srcs = ["bmp_test.go"],
+    embed = [":bmp"],
+    deps = [
+        "//pkg/packet/bgp",
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_stretchr_testify//require:go_default_library",
+    ],
+)

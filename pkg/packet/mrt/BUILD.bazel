@@ -1,0 +1,25 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "mrt",
+    srcs = ["mrt.go"],
+    importpath = "github.com/osrg/gobgp/v3/pkg/packet/mrt",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/packet/bgp"],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":mrt",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "mrt_test",
+    srcs = ["mrt_test.go"],
+    embed = [":mrt"],
+    deps = [
+        "//pkg/packet/bgp",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)

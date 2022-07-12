@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "rtr",
+    srcs = ["rtr.go"],
+    importpath = "github.com/osrg/gobgp/v3/pkg/packet/rtr",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":rtr",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "rtr_test",
+    srcs = ["rtr_test.go"],
+    embed = [":rtr"],
+    deps = [
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_stretchr_testify//require:go_default_library",
+    ],
+)

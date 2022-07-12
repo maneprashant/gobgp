@@ -1,0 +1,54 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "table",
+    srcs = [
+        "adj.go",
+        "destination.go",
+        "message.go",
+        "path.go",
+        "policy.go",
+        "roa.go",
+        "table.go",
+        "table_manager.go",
+        "vrf.go",
+    ],
+    importpath = "github.com/osrg/gobgp/v3/internal/pkg/table",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//api",
+        "//internal/pkg/config",
+        "//pkg/log",
+        "//pkg/packet/bgp",
+        "@com_github_dgryski_go_farm//:go_default_library",
+        "@com_github_k_sone_critbitgo//:go_default_library",
+    ],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":table",
+    visibility = ["//:__subpackages__"],
+)
+
+go_test(
+    name = "table_test",
+    srcs = [
+        "adj_test.go",
+        "destination_test.go",
+        "message_test.go",
+        "path_test.go",
+        "policy_test.go",
+        "roa_test.go",
+        "table_manager_test.go",
+        "table_test.go",
+    ],
+    embed = [":table"],
+    deps = [
+        "//internal/pkg/config",
+        "//pkg/log",
+        "//pkg/packet/bgp",
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_stretchr_testify//require:go_default_library",
+    ],
+)

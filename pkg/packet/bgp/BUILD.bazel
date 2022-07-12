@@ -1,0 +1,44 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "bgp",
+    srcs = [
+        "bgp.go",
+        "bgpattrtype_string.go",
+        "constant.go",
+        "esitype_string.go",
+        "fsmstate_string.go",
+        "helper.go",
+        "prefix_sid.go",
+        "sr_policy.go",
+        "srbehavior.go",
+        "srbehavior_string.go",
+        "validate.go",
+    ],
+    importpath = "github.com/osrg/gobgp/v3/pkg/packet/bgp",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":bgp",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "bgp_test",
+    srcs = [
+        "bgp_race_test.go",
+        "bgp_test.go",
+        "prefix_sid_test.go",
+        "sr_policy_test.go",
+        "validate_test.go",
+    ],
+    data = glob(["testdata/**"]),
+    embed = [":bgp"],
+    deps = [
+        "@com_github_go_test_deep//:go_default_library",
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_stretchr_testify//require:go_default_library",
+    ],
+)

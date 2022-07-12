@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "config_lib",
+    srcs = ["example_toml.go"],
+    importpath = "github.com/osrg/gobgp/v3/tools/config",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//internal/pkg/config",
+        "@com_github_burntsushi_toml//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "config",
+    embed = [":config_lib"],
+    visibility = ["//visibility:public"],
+)

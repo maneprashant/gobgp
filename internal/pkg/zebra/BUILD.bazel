@@ -1,0 +1,44 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "zebra",
+    srcs = [
+        "afi_string.go",
+        "apitype_string.go",
+        "linktype_string.go",
+        "lsptype_string.go",
+        "nexthopflag_string.go",
+        "nexthoptype_string.go",
+        "ptmenable_string.go",
+        "ptmstatus_string.go",
+        "routetype_string.go",
+        "safi_string.go",
+        "zapi.go",
+        "zapi_bsd.go",
+        "zapi_darwin.go",
+        "zapi_linux.go",
+        "zapi_windows.go",
+    ],
+    importpath = "github.com/osrg/gobgp/v3/internal/pkg/zebra",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//pkg/log",
+        "//pkg/packet/bgp",
+    ],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":zebra",
+    visibility = ["//:__subpackages__"],
+)
+
+go_test(
+    name = "zebra_test",
+    srcs = ["zapi_test.go"],
+    embed = [":zebra"],
+    deps = [
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_stretchr_testify//require:go_default_library",
+    ],
+)

@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "apiutil",
+    srcs = [
+        "attribute.go",
+        "capability.go",
+        "util.go",
+    ],
+    importpath = "github.com/osrg/gobgp/v3/pkg/apiutil",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//api",
+        "//pkg/packet/bgp",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+        "@org_golang_google_protobuf//types/known/timestamppb:go_default_library",
+    ],
+)
+
+alias(
+    name = "go_default_library",
+    actual = ":apiutil",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "apiutil_test",
+    srcs = [
+        "attribute_test.go",
+        "capability_test.go",
+    ],
+    embed = [":apiutil"],
+    deps = [
+        "//api",
+        "//pkg/packet/bgp",
+        "@com_github_stretchr_testify//assert:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+    ],
+)

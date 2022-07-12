@@ -1,0 +1,58 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "gobgp_lib",
+    srcs = [
+        "bmp.go",
+        "common.go",
+        "global.go",
+        "loglevel.go",
+        "main.go",
+        "monitor.go",
+        "mrt.go",
+        "neighbor.go",
+        "policy.go",
+        "root.go",
+        "rpki.go",
+        "vrf.go",
+    ],
+    importpath = "github.com/osrg/gobgp/v3/cmd/gobgp",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//api",
+        "//internal/pkg/config",
+        "//internal/pkg/table",
+        "//internal/pkg/version",
+        "//pkg/apiutil",
+        "//pkg/packet/bgp",
+        "//pkg/packet/bmp",
+        "//pkg/packet/mrt",
+        "@com_github_spf13_cobra//:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_google_grpc//credentials:go_default_library",
+        "@org_golang_google_grpc//credentials/insecure:go_default_library",
+        "@org_golang_google_protobuf//types/known/anypb:go_default_library",
+        "@org_golang_x_text//cases:go_default_library",
+        "@org_golang_x_text//language:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "gobgp",
+    embed = [":gobgp_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "gobgp_test",
+    srcs = [
+        "common_test.go",
+        "global_test.go",
+    ],
+    embed = [":gobgp_lib"],
+    deps = [
+        "//pkg/apiutil",
+        "//pkg/packet/bgp",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)

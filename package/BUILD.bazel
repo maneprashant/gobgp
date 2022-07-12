@@ -1,0 +1,55 @@
+load("@rules_pkg//:pkg.bzl", "pkg_deb", "pkg_tar")
+
+pkg_tar(
+    name = "tar-gobgpd-bin",
+    srcs = ["//cmd/gobgpd"],
+    mode = "0755",
+    package_dir = "/usr/bin",
+    strip_prefix = "/cmd/gobgpd/gobgpd_",
+)
+
+pkg_tar(
+    name = "tar-gobgp-bin",
+    srcs = ["//cmd/gobgp"],
+    mode = "0755",
+    package_dir = "/usr/bin",
+    strip_prefix = "/cmd/gobgp/gobgp_",
+)
+
+pkg_tar(
+    name = "tar-gobgpd-config",
+    srcs = ["gobgpd.conf"],
+    mode = "0640",
+    package_dir = "/etc/gobgpd",
+)
+
+pkg_tar(
+    name = "tar-gobgpd-service",
+    srcs = ["gobgpd.service"],
+    mode = "0640",
+    package_dir = "/lib/systemd/system",
+)
+
+pkg_tar(
+    name = "debian-data",
+    extension = "tar.gz",
+    deps = [
+        ":tar-gobgp-bin",
+        ":tar-gobgpd-bin",
+        ":tar-gobgpd-config",
+        ":tar-gobgpd-service",
+    ],
+)
+
+pkg_deb(
+    name = "gobgp-debian",
+    architecture = "amd64",
+    built_using = "bazel",
+    data = ":debian-data",
+    description = "GoBGP Daemon",
+    maintainer = "support@aviatrix.com",
+    package = "GoBGP",
+    postinst = "postinst.sh",
+    preinst = "preinst.sh",
+    version = "3.4.0",
+)
